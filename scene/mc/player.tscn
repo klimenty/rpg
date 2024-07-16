@@ -1,9 +1,46 @@
-[gd_scene load_steps=111 format=3 uid="uid://lcdtuwwhj4po"]
+[gd_scene load_steps=121 format=3 uid="uid://lcdtuwwhj4po"]
 
 [ext_resource type="Script" path="res://script/mc/Player.gd" id="1_c3bmf"]
+[ext_resource type="Texture2D" uid="uid://csnclm7wh0m0w" path="res://art/mc/Explosions.png" id="2_b2sd6"]
 [ext_resource type="Texture2D" uid="uid://ws65femxmx5n" path="res://art/mc/64X128_Idle_Free.png" id="2_kffyv"]
 [ext_resource type="Texture2D" uid="uid://41r4pcidx362" path="res://art/mc/64X128_Runing_Free.png" id="3_2tmg3"]
 [ext_resource type="Texture2D" uid="uid://bn2flw0vh7acg" path="res://art/mc/64X128_Walking_Free.png" id="4_788bm"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yoko3"]
+atlas = ExtResource("2_b2sd6")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k4pib"]
+atlas = ExtResource("2_b2sd6")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rdx8e"]
+atlas = ExtResource("2_b2sd6")
+region = Rect2(384, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wwyb1"]
+atlas = ExtResource("2_b2sd6")
+region = Rect2(576, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m3krr"]
+atlas = ExtResource("2_b2sd6")
+region = Rect2(768, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_shlu2"]
+atlas = ExtResource("2_b2sd6")
+region = Rect2(960, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7dtgk"]
+atlas = ExtResource("2_b2sd6")
+region = Rect2(1152, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cu1is"]
+atlas = ExtResource("2_b2sd6")
+region = Rect2(1344, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bg7yc"]
+atlas = ExtResource("2_b2sd6")
+region = Rect2(1536, 0, 192, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_khmh1"]
 atlas = ExtResource("2_kffyv")
@@ -425,6 +462,38 @@ region = Rect2(576, 384, 64, 128)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_yoko3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k4pib")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rdx8e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wwyb1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m3krr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_shlu2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7dtgk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cu1is")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bg7yc")
+}],
+"loop": false,
+"name": &"death",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_khmh1")
 }, {
 "duration": 1.0,
@@ -809,3 +878,10 @@ animation = &"idle_down"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.5, -2.5)
 shape = SubResource("RectangleShape2D_g5v5w")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2.5, 2.5)
+limit_left = 0
+limit_top = 0
+limit_right = 1598
+limit_bottom = 894
