@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://m1k7kkaebhgo"]
+[gd_scene load_steps=10 format=3 uid="uid://m1k7kkaebhgo"]
 
 [ext_resource type="PackedScene" uid="uid://lcdtuwwhj4po" path="res://scene/mc/player.tscn" id="1_iy2si"]
 [ext_resource type="Texture2D" uid="uid://ca56y0qqw28c2" path="res://art/ground_tiles/Tilemap_Flat.png" id="2_0im6w"]
+[ext_resource type="PackedScene" uid="uid://cvfqghqp568k2" path="res://scene/enviroment/interactive_objects/tree.tscn" id="2_v6top"]
 [ext_resource type="Texture2D" uid="uid://c6hteoryt332u" path="res://art/objects/09.png" id="3_uhybt"]
 [ext_resource type="Texture2D" uid="uid://djh3b1ipdn3ni" path="res://art/interactive_objects/Tree.png" id="4_0gxuq"]
 
@@ -119,3 +120,9 @@ layer_1/z_index = -1
 layer_1/tile_data = PackedInt32Array()
 layer_2/name = "objects"
 layer_2/tile_data = PackedInt32Array(655372, 1, 0, 524292, 1, 0, 262149, 1, 0, 262165, 1, 0, 262157, 1, 0, 786451, 1, 0, 720900, 1, 0, 65539, 1, 0)
+
+[node name="Tree" parent="." instance=ExtResource("2_v6top")]
+position = Vector2(559, 440)
+
+[node name="Tree2" parent="." instance=ExtResource("2_v6top")]
+position = Vector2(1127, 180)
