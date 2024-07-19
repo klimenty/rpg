@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://m1k7kkaebhgo"]
+[gd_scene load_steps=11 format=3 uid="uid://m1k7kkaebhgo"]
 
 [ext_resource type="PackedScene" uid="uid://lcdtuwwhj4po" path="res://scene/mc/player.tscn" id="1_iy2si"]
 [ext_resource type="Texture2D" uid="uid://ca56y0qqw28c2" path="res://art/ground_tiles/Tilemap_Flat.png" id="2_0im6w"]
 [ext_resource type="PackedScene" uid="uid://cvfqghqp568k2" path="res://scene/enviroment/interactive_objects/tree.tscn" id="2_v6top"]
 [ext_resource type="Texture2D" uid="uid://c6hteoryt332u" path="res://art/objects/09.png" id="3_uhybt"]
 [ext_resource type="Texture2D" uid="uid://djh3b1ipdn3ni" path="res://art/interactive_objects/Tree.png" id="4_0gxuq"]
+[ext_resource type="PackedScene" uid="uid://dg26exysxvce1" path="res://scene/characters/enemies/enemy.tscn" id="6_v7thy"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8psv1"]
 texture = ExtResource("2_0im6w")
@@ -107,7 +108,7 @@ sources/2 = SubResource("TileSetAtlasSource_1towt")
 [node name="World" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_iy2si")]
-position = Vector2(32, 64)
+position = Vector2(32, 96)
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_3s0jd")
@@ -126,3 +127,6 @@ position = Vector2(559, 440)
 
 [node name="Tree2" parent="." instance=ExtResource("2_v6top")]
 position = Vector2(1127, 180)
+
+[node name="Enemy" parent="." instance=ExtResource("6_v7thy")]
+position = Vector2(96, 96)

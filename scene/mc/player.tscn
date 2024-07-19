@@ -866,21 +866,25 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g5v5w"]
-size = Vector2(51, 89)
+size = Vector2(64, 64)
 
 [node name="Player" type="CharacterBody2D"]
+position = Vector2(2.08165e-12, 32)
+collision_layer = 3
 script = ExtResource("1_c3bmf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(2.08165e-12, -32)
 sprite_frames = SubResource("SpriteFrames_cpwnp")
 animation = &"idle_down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0.5, -2.5)
+position = Vector2(2.08165e-12, 2.08165e-12)
 shape = SubResource("RectangleShape2D_g5v5w")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(2.5, 2.5)
+position = Vector2(2.08165e-12, -32)
+zoom = Vector2(0.75, 0.75)
 limit_left = 0
 limit_top = 0
 limit_right = 1598

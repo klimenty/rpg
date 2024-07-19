@@ -10,7 +10,8 @@ var is_moving = false
 var direction_vector = Vector2.ZERO
 var target_position = Vector2.ZERO
 var key_buffer = []
-var last_direction: Vector2 
+var last_direction: Vector2
+
 
 func _ready():
 	target_position = global_position

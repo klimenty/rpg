@@ -14,6 +14,15 @@ config/name="rpg_v2"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 
+[display]
+
+window/size/viewport_width=480
+window/size/viewport_height=360
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gloot/plugin.cfg")
+
 [filesystem]
 
 import/blender/enabled=false
