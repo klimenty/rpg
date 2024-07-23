@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://cfb43gkwfqjjy"]
+
+[ext_resource type="Texture2D" uid="uid://d0gl1kcjmm3o5" path="res://art/characters/enemy/Female_I.png" id="1_cl88b"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ommbq"]
+size = Vector2(64, 64)
+
+[node name="Enemy" type="CharacterBody2D"]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(2.08165e-12, -10)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("1_cl88b")
+hframes = 12
+vframes = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ommbq")
