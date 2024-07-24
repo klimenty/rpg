@@ -1,104 +1,60 @@
 extends CharacterBody2D
 
-var walk_speed = 200
-var run_speed = 400
-var speed = 200
-var step_distance = 64
-var is_walking = false
-var is_running = false
-var is_moving = false
-var direction_vector = Vector2.ZERO
-var target_position = Vector2.ZERO
-var key_buffer = []
-var last_direction: Vector2
-@export var tile_map: TileMap
+var walk_speed: int = 200 #Default character speed
+var run_speed: int = 400 #Speed when player hold shift
+var speed: int = 200 #S
+var step_distance = 64 #Grid size
+var is_walking = false #If True, speed = walk_speed
+var is_running = false #If True, speed = run_speed
+var is_moving = false #If True, lock player movement
+var direction_vector = Vector2.ZERO #Direction of character to move or look
+var target_position = Vector2.ZERO #Store next position to move
+var key_buffer = [] #Store all movement Inputs. Last one is used to update direction
+@export var tile_map: TileMap #Store active tilemap
 @export var player_marker: CollisionShape2D
 @export var ray_cast_2d: RayCast2D
-@export var move_up_timer: Timer
-@export var move_down_timer: Timer
-@export var move_left_timer: Timer
-@export var move_right_timer: Timer
-var timer: float
+@export var movement_timer: float #Check how long movement Input was pressed
 
 
 func _ready():
+	#Reset movement target tile
 	target_position = global_position
 
 func _input(event):
 	
+	#Check if Shift is pressed and modify movement speed
 	if event.is_action_pressed("shift"):
 		is_running = true
 		speed = run_speed
-	
+		
+	#Check if Shift was released and modify movement speed
 	if event.is_action_released("shift"):
 		speed = walk_speed
 		is_running = false
 	
 	if event.is_action_pressed("up"):
-		#last_direction = Vector2(0, -1)
-		#move_up_timer.start()
 		key_buffer.append("up")
-		timer = 0
+		movement_timer = 0
 	elif event.is_action_pressed("down"):
-		#last_direction = Vector2(0, 1)
-		#move_down_timer.start()
 		key_buffer.append("down")
-		timer = 0
+		movement_timer = 0
 	elif event.is_action_pressed("left"):
-		#last_direction = Vector2(-1, 0)
-		#move_left_timer.start()
 		key_buffer.append("left")
-		timer = 0
+		movement_timer = 0
 	elif event.is_action_pressed("right"):
-		#last_direction = Vector2(1, 0)
-		#move_right_timer.start()
 		key_buffer.append("right")
-		timer = 0
+		movement_timer = 0
 
 	if event.is_action_released("up"):
 		key_buffer.erase("up")
-		#move_up_timer.stop()
 	elif event.is_action_released("down"):
 		key_buffer.erase("down")
-		#move_down_timer.stop()
 	elif event.is_action_released("left"):
 		key_buffer.erase("left")
-		#move_left_timer.stop()
 	elif event.is_action_released("right"):
 		key_buffer.erase("right")
-		#move_right_timer.stop()
-
-	#if not is_moving:
-		#update_direction()
-			
-
-#func update_direction():
-	#if key_buffer.size() > 0:
-		#if timer >= 100:
-			#var last_key = key_buffer.back()
-#
-			#match last_key:
-				#"up":
-					#direction_vector = Vector2(0, -1)
-				#"down":
-					#direction_vector = Vector2(0, 1)
-				#"left":
-					#direction_vector = Vector2(-1, 0)
-				#"right":
-					#direction_vector = Vector2(1, 0)
-					#
-#
-			#move_in_direction()
-	#else:
-		#
-		#direction_vector = Vector2.ZERO
-
 
 func move_in_direction():
-	if direction_vector != last_direction:
-		ray_cast_2d.target_position = direction_vector * step_distance
-		last_direction = direction_vector
-		return
 	
 	if direction_vector != Vector2.ZERO:
 		target_position = global_position + direction_vector * step_distance
@@ -111,34 +67,39 @@ func move_in_direction():
 		if tile_data.get_custom_data("walkable") == false:
 			return
 		
-		
-		
 		is_moving = true
-		ray_cast_2d.target_position = direction_vector * step_distance
+		look_in_direction()
 		
-		
+
+func look_in_direction() -> void:
+	ray_cast_2d.target_position = direction_vector * step_distance
+
+
+func update_direction() -> void:
+	var last_key = key_buffer.back()
+	
+	match last_key:
+		"up":
+			direction_vector = Vector2(0, -1)
+		"down":
+			direction_vector = Vector2(0, 1)
+		"left":
+			direction_vector = Vector2(-1, 0)
+		"right":
+			direction_vector = Vector2(1, 0)
 
 
 func _physics_process(delta):
 	if key_buffer.size() > 0 and is_moving == false:
-		timer += delta
-		print(timer)
-		
-		var last_key = key_buffer.back()
-		match last_key:
-			"up":
-				direction_vector = Vector2(0, -1)
-			"down":
-				direction_vector = Vector2(0, 1)
-			"left":
-				direction_vector = Vector2(-1, 0)
-			"right":
-				direction_vector = Vector2(1, 0)
-		
-		if timer >= 0.08:			
+
+		movement_timer += delta
+
+		update_direction()
+
+		if movement_timer >= 0.08:			
 			move_in_direction()
 		else:
-			ray_cast_2d.target_position = direction_vector * step_distance
+			look_in_direction()
 	else:
 		direction_vector = Vector2.ZERO
 	
@@ -147,14 +108,11 @@ func _physics_process(delta):
 		if distance_to_target.length() < speed * delta:
 			global_position = target_position
 			is_moving = false
-			#if key_buffer.size() > 0:
-				#update_direction()
-			#else:
-				#direction_vector = Vector2.ZERO
 		else:
 			global_position += distance_to_target.normalized() * speed * delta
 		
-	
+func move_player_marker():
+	pass
 	#play_animation(direction_vector)
 
 
@@ -193,20 +151,3 @@ func _physics_process(delta):
 			#
 #func player():
 	#pass
-
-
-
-func _on_move_up_timer_timeout() -> void:
-	key_buffer.append("up")
-
-
-func _on_move_down_timer_timeout() -> void:
-	key_buffer.append("down")
-
-
-func _on_move_left_timer_timeout() -> void:
-	key_buffer.append("left")
-
-
-func _on_move_right_timer_timeout() -> void:
-	key_buffer.append("right")

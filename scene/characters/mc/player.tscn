@@ -6,15 +6,11 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_waw28"]
 size = Vector2(64, 64)
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("player_marker", "ray_cast_2d", "move_up_timer", "move_down_timer", "move_left_timer", "move_right_timer")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("player_marker", "ray_cast_2d")]
 y_sort_enabled = true
 script = ExtResource("1_1fr02")
 player_marker = NodePath("PlayerMarker")
 ray_cast_2d = NodePath("RayCast2D")
-move_up_timer = NodePath("MovementTimers/MoveUpTimer")
-move_down_timer = NodePath("MovementTimers/MoveDownTimer")
-move_left_timer = NodePath("MovementTimers/MoveLeftTimer")
-move_right_timer = NodePath("MovementTimers/MoveRightTimer")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_v4aev")
@@ -29,22 +25,3 @@ shape = SubResource("RectangleShape2D_waw28")
 [node name="RayCast2D" type="RayCast2D" parent="."]
 target_position = Vector2(2.08165e-12, 64)
 collide_with_areas = true
-
-[node name="MovementTimers" type="Node" parent="."]
-
-[node name="MoveUpTimer" type="Timer" parent="MovementTimers"]
-wait_time = 0.1
-
-[node name="MoveDownTimer" type="Timer" parent="MovementTimers"]
-wait_time = 0.1
-
-[node name="MoveLeftTimer" type="Timer" parent="MovementTimers"]
-wait_time = 0.1
-
-[node name="MoveRightTimer" type="Timer" parent="MovementTimers"]
-wait_time = 0.1
-
-[connection signal="timeout" from="MovementTimers/MoveUpTimer" to="." method="_on_move_up_timer_timeout"]
-[connection signal="timeout" from="MovementTimers/MoveDownTimer" to="." method="_on_move_down_timer_timeout"]
-[connection signal="timeout" from="MovementTimers/MoveLeftTimer" to="." method="_on_move_left_timer_timeout"]
-[connection signal="timeout" from="MovementTimers/MoveRightTimer" to="." method="_on_move_right_timer_timeout"]
