@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://cfb43gkwfqjjy"]
+
+[ext_resource type="Texture2D" uid="uid://d0gl1kcjmm3o5" path="res://old/art/characters/enemy/Female_I.png" id="1_cl88b"]
+[ext_resource type="Script" path="res://old/script/enemy/enemy.gd" id="1_xj0yr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cacnc"]
+size = Vector2(62, 62)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_o1j44"]
+radius = 160.0
+
+[node name="Enemy" type="CharacterBody2D" groups=["enemies"]]
+y_sort_enabled = true
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_xj0yr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+light_mask = 2
+visibility_layer = 2
+y_sort_enabled = true
+position = Vector2(2.08165e-12, -10)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("1_cl88b")
+hframes = 12
+vframes = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_cacnc")
+one_way_collision_margin = 0.1
+
+[node name="DetectionArea" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("CircleShape2D_o1j44")
+
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]

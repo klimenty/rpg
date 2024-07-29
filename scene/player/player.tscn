@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://bxljvxnni0q0q"]
+
+[ext_resource type="Script" path="res://script/characters/mc/Player.gd" id="1_fx1gi"]
+[ext_resource type="Texture2D" uid="uid://ws65femxmx5n" path="res://old/art/characters/mc/64X128_Idle_Free.png" id="2_eyb26"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_epbtj"]
+atlas = ExtResource("2_eyb26")
+region = Rect2(2.08165e-12, 2.08165e-12, 64, 128)
+
+[node name="Player" type="Node2D" node_paths=PackedStringArray("sprite_2d", "ray_cast_2d")]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_fx1gi")
+sprite_2d = NodePath("Sprite2D")
+ray_cast_2d = NodePath("RayCast2D")
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(2.08165e-12, 64)
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_epbtj")
+offset = Vector2(2.08165e-12, -32)
+
+[node name="Camera2D" type="Camera2D" parent="Sprite2D"]
