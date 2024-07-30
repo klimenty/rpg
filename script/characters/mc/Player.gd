@@ -6,18 +6,35 @@ var direction_vector: Vector2 = Vector2.ZERO #Store direction value for movement
 @export var sprite_2d: Sprite2D #Store character sprite. It moves to the Player position
 @export var ray_cast_2d: RayCast2D #Store RayCast2D. It's used to check if next tile is free before moving
 var is_moving: bool = false #If is True, lock player movement and actions. But you still can sprint or sneaking
-var speed: float = 5.0 #This variable used for movement. Value can be altered based on user input
+var speed: float = 3.0 #This variable used for movement. Value can be altered based on user input
 var cell_size: int = 64 #Store cell length. It used for RayCast2D
+@export var walking_speed: float = 3.0
+@export var running_speed: float = 6.0
+@export var sneaking_speed: float = 1.5
+
+
+func _ready() -> void:
+	#Set default speed to walking speed at the start of scene
+	speed = walking_speed
+
 
 #Handles all player inputs
 func _input(event: InputEvent) -> void:
 	#Check if Shift is pressed and modify movement speed
-	#if event.is_action_pressed("shift"):
-		#pass
+	if event.is_action_pressed("shift"):
+		speed = running_speed
 		
 	#Check if Shift was released and modify movement speed
-	#if event.is_action_released("shift"):
-		#pass
+	if event.is_action_released("shift"):
+		speed = walking_speed
+		
+		#Check if Shift is pressed and modify movement speed
+	if event.is_action_pressed("ctrl"):
+		speed = sneaking_speed
+		
+	#Check if Shift was released and modify movement speed
+	if event.is_action_released("ctrl"):
+		speed = walking_speed
 	
 	#Store all pressed movement buttons to key_buffer variable
 	if event.is_action_pressed("up"):
