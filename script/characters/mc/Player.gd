@@ -3,7 +3,7 @@ extends Node2D
 var key_buffer: Array[String] = [] #Store all movement Inputs. Last one is used to update direction
 var direction_vector: Vector2 = Vector2.ZERO #Store direction value for movement
 @export var tile_map: TileMap #Store tilemap. TileMap is needed for movement so game will crash if you don't link it in scene
-@export var sprite_2d: Sprite2D #Store character 2D. It moves to the Player position
+@export var sprite_2d: Sprite2D #Store character sprite. It moves to the Player position
 @export var ray_cast_2d: RayCast2D #Store RayCast2D. It's used to check if next tile is free before moving
 var is_moving: bool = false #If is True, lock player movement and actions. But you still can sprint or sneaking
 var speed: float = 5.0 #This variable used for movement. Value can be altered based on user input
