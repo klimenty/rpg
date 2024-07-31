@@ -23,19 +23,19 @@ func _input(event: InputEvent) -> void:
 	#Check if Shift is pressed and modify movement speed
 	if event.is_action_pressed("shift"):
 		speed = running_speed
-		
+
 	#Check if Shift was released and modify movement speed
 	if event.is_action_released("shift"):
 		speed = walking_speed
-		
-		#Check if Shift is pressed and modify movement speed
+
+	#Check if Shift is pressed and modify movement speed
 	if event.is_action_pressed("ctrl"):
 		speed = sneaking_speed
-		
+
 	#Check if Shift was released and modify movement speed
 	if event.is_action_released("ctrl"):
 		speed = walking_speed
-	
+
 	#Store all pressed movement buttons to key_buffer variable
 	if event.is_action_pressed("up"):
 		key_buffer.append("up")
@@ -55,8 +55,6 @@ func _input(event: InputEvent) -> void:
 		key_buffer.erase("left")
 	elif event.is_action_released("right"):
 		key_buffer.erase("right")
-		
-
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -70,7 +68,7 @@ func _physics_process(delta: float) -> void:
 		if global_position == sprite_2d.global_position:
 			is_moving = false
 			return
-		
+
 	#Checks if player is _not_ in moving animation.	
 	if not is_moving:
 		#If there is inputs in key_buffer, call function to transform input to Vector2
@@ -87,7 +85,7 @@ func _physics_process(delta: float) -> void:
 func update_direction() -> void:
 	#Select last pressed key from key_buffer
 	var last_key: String = key_buffer.back()
-	
+
 	#Check last pressed key value and updates direction_vector
 	match last_key:
 		"up":
@@ -127,4 +125,3 @@ func move(direction: Vector2) -> void:
 	global_position = tile_map.map_to_local(target_tile)
 	#Leave Sprite2D on current tile. Without it Sptite2D will teleport with player
 	sprite_2d.global_position = tile_map.map_to_local(current_tile)
-	

@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bldicj86jhcjg"]
+[gd_scene load_steps=6 format=3 uid="uid://bldicj86jhcjg"]
 
 [ext_resource type="Texture2D" uid="uid://d0gl1kcjmm3o5" path="res://old/art/characters/enemy/Female_I.png" id="1_senl6"]
 [ext_resource type="Script" path="res://script/characters/enemy/enemy.gd" id="1_wyk2o"]
@@ -9,6 +9,9 @@ region = Rect2(2.08165e-12, 2.08165e-12, 48, 96)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5k02b"]
 size = Vector2(64, 64)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5qqs6"]
+radius = 160.0
 
 [node name="Enemy" type="Node2D" node_paths=PackedStringArray("sprite_2d") groups=["enemies"]]
 position = Vector2(96, 96)
@@ -24,3 +27,8 @@ offset = Vector2(2.08165e-12, -24)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_5k02b")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("CircleShape2D_5qqs6")

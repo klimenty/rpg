@@ -75,6 +75,6 @@ player = NodePath("../Player")
 tile_map = NodePath("../TileMap")
 
 [node name="Enemy2" parent="." node_paths=PackedStringArray("player", "tile_map") instance=ExtResource("4_ro0sy")]
-position = Vector2(352, 224)
+position = Vector2(736, 288)
 player = NodePath("../Player")
 tile_map = NodePath("../TileMap")

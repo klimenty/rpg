@@ -21,7 +21,7 @@ func _ready() -> void:
 	a_star_grid_2d.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
 	#Updates AStarGrid2D. Without it new parameters won't work
 	a_star_grid_2d.update()
-	
+
 	#Store size of region
 	var region_size: Vector2i = a_star_grid_2d.region.size
 	#Make all tiles on the grid without "walkable" tag non walkable
@@ -43,8 +43,8 @@ func move() -> void:
 	var enemies: Variant = get_tree().get_nodes_in_group("enemies")
 	#Stores all positions of characters in "enemies" grou[
 	var occupied_positions: Array[Vector2i] = []
-	
-	
+
+
 	#Adds enemies positions to occupied_positions array
 	for enemy in enemies:
 		#Ignore own position so it won't become non walkable later
@@ -52,34 +52,34 @@ func move() -> void:
 			continue
 		#Adds enemies positions to occupied_positions array
 		occupied_positions.append(tile_map.local_to_map(enemy.global_position))
-	
+
 	#Makes all positions in occupied_positions non walkable
 	for occupied_position in occupied_positions:
 		a_star_grid_2d.set_point_solid(occupied_position)
-	
+
 	#Find a path from current position to player position
 	var path = a_star_grid_2d.get_id_path(
 		tile_map.local_to_map(global_position),
 		tile_map.local_to_map(player.global_position)
 	)
-	
+
 	#Make all enemies pisitions walkable again. Character already have path so they won't stuck in each other
 	for occupied_position in occupied_positions:
 		a_star_grid_2d.set_point_solid(occupied_position, false)
-	
+
 	#First position in path always Vector2i(0, 0) so we get rid of it
 	path.pop_front()
-	
+
 	#If there is no path, stop function
 	if path.is_empty():
 		print("Can't find path")
 		return
-	
+
 	#Last value in the path is player position. We stop movement so character won't try to get to occupied position
 	if path.size() == 1:
 		print("I have arrived")
 		return
-		
+
 	#Store current position for Sprite2D
 	var original_position = Vector2(global_position)
 	#Move character to new position
@@ -102,4 +102,4 @@ func _physics_process(delta: float) -> void:
 		#Stop function and don't alow to move again if is_moving is True
 		return
 
-	move()	
+	move()
