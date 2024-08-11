@@ -1,10 +1,12 @@
 [gd_scene load_steps=4 format=3 uid="uid://bxljvxnni0q0q"]
 
 [ext_resource type="Script" path="res://script/characters/mc/Player.gd" id="1_fx1gi"]
-[ext_resource type="Texture2D" uid="uid://ws65femxmx5n" path="res://old/art/characters/mc/64X128_Idle_Free.png" id="2_eyb26"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_sfoa2"]
+load_path = "res://.godot/imported/64X128_Idle_Free.png-67f427ec8b038d67f2bb605fa234401e.ctex"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_epbtj"]
-atlas = ExtResource("2_eyb26")
+atlas = SubResource("CompressedTexture2D_sfoa2")
 region = Rect2(2.08165e-12, 2.08165e-12, 64, 128)
 
 [node name="Player" type="Node2D" node_paths=PackedStringArray("sprite_2d", "ray_cast_2d")]

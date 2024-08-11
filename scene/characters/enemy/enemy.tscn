@@ -1,10 +1,12 @@
 [gd_scene load_steps=6 format=3 uid="uid://bldicj86jhcjg"]
 
-[ext_resource type="Texture2D" uid="uid://d0gl1kcjmm3o5" path="res://old/art/characters/enemy/Female_I.png" id="1_senl6"]
 [ext_resource type="Script" path="res://script/characters/enemy/enemy.gd" id="1_wyk2o"]
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_u2cer"]
+load_path = "res://.godot/imported/Female_I.png-b467c49120d79275fa4685fcf1a43baf.ctex"
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_flii0"]
-atlas = ExtResource("1_senl6")
+atlas = SubResource("CompressedTexture2D_u2cer")
 region = Rect2(2.08165e-12, 2.08165e-12, 48, 96)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5k02b"]
@@ -29,6 +31,7 @@ offset = Vector2(2.08165e-12, -24)
 shape = SubResource("RectangleShape2D_5k02b")
 
 [node name="DetectionArea" type="Area2D" parent="."]
+collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
 shape = SubResource("CircleShape2D_5qqs6")
