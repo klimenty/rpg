@@ -9,7 +9,8 @@ var cone_of_sight_length: int = 3
 var a_star_grid_2d: AStarGrid2D #Store AStarGrid2D. It's used for pathfinding
 var is_moving: bool = false #If is True, lock character movement and actions
 var speed: float = 2.0 #This variable used for movement. Value can be altered based on user input
-var counter: int = 0
+var raycast_update_timeout: int = 1
+var sight_direction: Vector2 = Vector2.DOWN
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -84,6 +85,7 @@ func move() -> void:
 
 	#Store current position for Sprite2D
 	var original_position: Vector2 = Vector2(global_position)
+	sight_direction = path[1] - path[0]
 	#Move character to new position
 	global_position = tile_map.map_to_local(path[0])
 	#Leaves Sprite2D in original position for walking animation
@@ -92,9 +94,13 @@ func move() -> void:
 	is_moving = true
 
 func _physics_process(_delta: float) -> void:
-	counter += 1
-	if counter % 10 == 0:
-		print(counter)
+	raycast_update_timeout += 1
+	if raycast_update_timeout % 10 == 0:
+		ray_cast_2d.target_position = sight_direction * cell_size * cone_of_sight_length
+		#Update RayCast2D direction. Without this direction will change in the next cycle
+		ray_cast_2d.force_raycast_update()
+		if ray_cast_2d.is_colliding():
+			pass
 	
 	#Checks if character is currently in moving animation.	If True, play movement animation and stop it when sprite reaches character position.
 	if is_moving:
