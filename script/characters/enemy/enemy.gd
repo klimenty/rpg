@@ -3,7 +3,9 @@ extends Node2D
 @export var player: Node2D #Store player node for pathfinding
 @export var tile_map: TileMap #Store tilemap. TileMap is needed for movement so game will crash if you don't link it in scene
 @export var sprite_2d: Sprite2D #Store character sprite. It moves to the enemy position
-
+@export var ray_cast_2d: RayCast2D
+var cell_size: int = 64
+var cone_of_sight_length: int = 3
 var a_star_grid_2d: AStarGrid2D #Store AStarGrid2D. It's used for pathfinding
 var is_moving: bool = false #If is True, lock character movement and actions
 var speed: float = 2.0 #This variable used for movement. Value can be altered based on user input
