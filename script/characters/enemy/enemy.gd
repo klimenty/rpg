@@ -9,7 +9,7 @@ var cone_of_sight_length: int = 3
 var a_star_grid_2d: AStarGrid2D #Store AStarGrid2D. It's used for pathfinding
 var is_moving: bool = false #If is True, lock character movement and actions
 var speed: float = 2.0 #This variable used for movement. Value can be altered based on user input
-
+var counter: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -92,6 +92,10 @@ func move() -> void:
 	is_moving = true
 
 func _physics_process(_delta: float) -> void:
+	counter += 1
+	if counter % 10 == 0:
+		print(counter)
+	
 	#Checks if character is currently in moving animation.	If True, play movement animation and stop it when sprite reaches character position.
 	if is_moving:
 		#Move sprite_2d to character position. Speed is determined by speed variable. 
