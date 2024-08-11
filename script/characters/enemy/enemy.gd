@@ -32,7 +32,7 @@ func _ready() -> void:
 			#Select a tile with x and y coordinates
 			var tile_position: Vector2i = Vector2i(x, y)
 			#Collect data_layer infromation from layer 0 of selected tile
-			var tile_data = tile_map.get_cell_tile_data(0, tile_position)
+			var tile_data: TileData = tile_map.get_cell_tile_data(0, tile_position)
 			#If there is no tile or it dosent gave "walkable" tag, make position non walkable
 			if tile_data == null or not tile_data.get_custom_data("walkable"):
 				a_star_grid_2d.set_point_solid(tile_position)
@@ -46,7 +46,7 @@ func move() -> void:
 
 
 	#Adds enemies positions to occupied_positions array
-	for enemy in enemies:
+	for enemy: Variant in enemies:
 		#Ignore own position so it won't become non walkable later
 		if enemy == self:
 			continue
@@ -58,7 +58,7 @@ func move() -> void:
 		a_star_grid_2d.set_point_solid(occupied_position)
 
 	#Find a path from current position to player position
-	var path = a_star_grid_2d.get_id_path(
+	var path: Array = a_star_grid_2d.get_id_path(
 		tile_map.local_to_map(global_position),
 		tile_map.local_to_map(player.global_position)
 	)
@@ -81,7 +81,7 @@ func move() -> void:
 		return
 
 	#Store current position for Sprite2D
-	var original_position = Vector2(global_position)
+	var original_position: Vector2 = Vector2(global_position)
 	#Move character to new position
 	global_position = tile_map.map_to_local(path[0])
 	#Leaves Sprite2D in original position for walking animation
@@ -89,7 +89,7 @@ func move() -> void:
 	#Lock out character movement until movement animation is finished
 	is_moving = true
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	#Checks if character is currently in moving animation.	If True, play movement animation and stop it when sprite reaches character position.
 	if is_moving:
 		#Move sprite_2d to character position. Speed is determined by speed variable. 

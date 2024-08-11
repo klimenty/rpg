@@ -21,7 +21,7 @@ enum MovementStates {
 	RUNNING,
 	SNEAKING
 }
-var MovementState = MovementStates.WALKING
+var MovementState: int = MovementStates.WALKING
 
 
 func _ready() -> void:
@@ -65,7 +65,7 @@ func _input(event: InputEvent) -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	#Change speed based on MovementState
 	move_state_machine()
 
@@ -88,7 +88,7 @@ func _physics_process(delta: float) -> void:
 
 
 #Change speed based on MovementState
-func move_state_machine():
+func move_state_machine() -> void:
 	match MovementState:
 		MovementStates.WALKING:
 			speed = walking_speed
@@ -121,8 +121,8 @@ func move(direction: Vector2) -> void:
 	var current_tile: Vector2i = tile_map.local_to_map(global_position)
 	#Get target tile Vector2i
 	var target_tile: Vector2i = Vector2i(
-		current_tile.x + direction.x,
-		current_tile.y + direction.y,
+		current_tile.x + int(direction.x),
+		current_tile.y + int(direction.y)
 	)
 	#Get custom data layer from target tile
 	var tile_data: TileData = tile_map.get_cell_tile_data(0, target_tile)

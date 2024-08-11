@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bxljvxnni0q0q"]
+[gd_scene load_steps=5 format=3 uid="uid://bxljvxnni0q0q"]
 
 [ext_resource type="Script" path="res://script/characters/mc/Player.gd" id="1_fx1gi"]
 
@@ -9,6 +9,9 @@ load_path = "res://.godot/imported/64X128_Idle_Free.png-67f427ec8b038d67f2bb605f
 atlas = SubResource("CompressedTexture2D_sfoa2")
 region = Rect2(2.08165e-12, 2.08165e-12, 64, 128)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7tica"]
+size = Vector2(64, 64)
+
 [node name="Player" type="Node2D" node_paths=PackedStringArray("sprite_2d", "ray_cast_2d")]
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_fx1gi")
@@ -17,6 +20,7 @@ ray_cast_2d = NodePath("RayCast2D")
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 target_position = Vector2(2.08165e-12, 64)
+collision_mask = 6
 collide_with_areas = true
 collide_with_bodies = false
 
@@ -25,3 +29,9 @@ texture = SubResource("AtlasTexture_epbtj")
 offset = Vector2(2.08165e-12, -32)
 
 [node name="Camera2D" type="Camera2D" parent="Sprite2D"]
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_7tica")
