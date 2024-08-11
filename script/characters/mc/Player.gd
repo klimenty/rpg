@@ -14,6 +14,13 @@ var cell_size: int = 64 #Store cell length. It used for RayCast2D
 var is_running: bool = false
 var is_sneaking: bool = false
 var action_buffer: Array[String] = []
+enum MovementStaes {
+	IDLE = 0,
+	WALKING,
+	RUNNING,
+	SNEAKING
+}
+var MovementStae = MovementStaes.IDLE
 
 
 func _ready() -> void:
@@ -31,13 +38,16 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_released("shift"):
 		speed = walking_speed
 
-	##Check if Ctrl is pressed and modify movement speed
-	#if event.is_action_pressed("ctrl"):
-		#action_buffer.append("ctrl")
-
-	##Check if Ctrl was released and modify movement speed
-	#if event.is_action_released("ctrl"):
-		#action_buffer.erase("ctrl")
+	#Check if Ctrl is pressed and modify movement speed
+	if event.is_action_pressed("ctrl"):
+		if is_sneaking == true:
+			speed = walking_speed
+			is_sneaking = false
+		else:
+			speed = sneaking_speed
+			is_sneaking = true
+				
+		
 
 	#Store all pressed movement buttons to key_buffer variable
 	if event.is_action_pressed("up"):
@@ -62,17 +72,7 @@ func _input(event: InputEvent) -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
-	if Input.is_action_just_pressed("ctrl"):
-		if is_sneaking:
-			speed = walking_speed
-			is_sneaking = false
-		else:
-			speed = sneaking_speed
-			is_sneaking = true
-	
-	if is_sneaking and speed != sneaking_speed:
-			is_sneaking = false
-	
+
 	#Checks if player is currently in moving animation.	If True, play movement animation and stop it when sprite reaches player position.
 	if is_moving:
 		#Move sprite_2d to player position. Speed is determined by speed variable. 
