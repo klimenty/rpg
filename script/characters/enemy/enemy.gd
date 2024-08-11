@@ -4,16 +4,28 @@ extends Node2D
 @export var tile_map: TileMap #Store tilemap. TileMap is needed for movement so game will crash if you don't link it in scene
 @export var sprite_2d: Sprite2D #Store character sprite. It moves to the enemy position
 @export var ray_cast_2d: RayCast2D
+@export var detection_area: CollisionShape2D
 var cell_size: int = 64
 var cone_of_sight_length: int = 3
 var a_star_grid_2d: AStarGrid2D #Store AStarGrid2D. It's used for pathfinding
 var is_moving: bool = false #If is True, lock character movement and actions
 var speed: float = 2.0 #This variable used for movement. Value can be altered based on user input
-var raycast_update_timeout: int = 1
 var sight_direction: Vector2 = Vector2.DOWN
+var target: Node
+var target_position: Vector2
+var target_area: Area2D
+var target_last_position: Vector2
+var next_step: Vector2
+enum States {
+	IDLE,
+	CHASE
+}
+var State: int = States.IDLE
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	state_controller(State)
+	
 	#Creates a new AStarGrid2D
 	a_star_grid_2d = AStarGrid2D.new()
 	#Set AStarGrid2D region to all used tiles in scene
@@ -47,7 +59,6 @@ func move() -> void:
 	#Stores all positions of characters in "enemies" grou[
 	var occupied_positions: Array[Vector2i] = []
 
-
 	#Adds enemies positions to occupied_positions array
 	for enemy: Variant in enemies:
 		#Ignore own position so it won't become non walkable later
@@ -63,7 +74,7 @@ func move() -> void:
 	#Find a path from current position to player position
 	var path: Array = a_star_grid_2d.get_id_path(
 		tile_map.local_to_map(global_position),
-		tile_map.local_to_map(player.global_position)
+		tile_map.local_to_map(target_position)
 	)
 
 	#Make all enemies pisitions walkable again. Character already have path so they won't stuck in each other
@@ -81,6 +92,7 @@ func move() -> void:
 	#Last value in the path is player position. We stop movement so character won't try to get to occupied position
 	if path.size() == 1:
 		print("I have arrived")
+		state_controller(States.IDLE)
 		return
 
 	#Store current position for Sprite2D
@@ -94,14 +106,6 @@ func move() -> void:
 	is_moving = true
 
 func _physics_process(_delta: float) -> void:
-	raycast_update_timeout += 1
-	if raycast_update_timeout % 10 == 0:
-		ray_cast_2d.target_position = sight_direction * cell_size * cone_of_sight_length
-		#Update RayCast2D direction. Without this direction will change in the next cycle
-		ray_cast_2d.force_raycast_update()
-		if ray_cast_2d.is_colliding():
-			pass
-	
 	#Checks if character is currently in moving animation.	If True, play movement animation and stop it when sprite reaches character position.
 	if is_moving:
 		#Move sprite_2d to character position. Speed is determined by speed variable. 
@@ -114,4 +118,55 @@ func _physics_process(_delta: float) -> void:
 		#Stop function and don't alow to move again if is_moving is True
 		return
 
-	move()
+	state_controller(State)
+
+	if State == States.IDLE:
+		if Engine.get_physics_frames() % 20 == 0:
+			update_raycast_direction()
+		if ray_cast_2d.is_colliding():
+			friend_or_foe()
+	
+	if State == States.CHASE:
+		update_target_position()
+		move()
+	
+func update_raycast_direction() -> void:
+	ray_cast_2d.target_position = sight_direction * cell_size * cone_of_sight_length
+	#Update RayCast2D direction. Without this direction will change in the next cycle
+	ray_cast_2d.force_raycast_update()
+
+
+func friend_or_foe() -> void:
+	var colliding_object: Variant = ray_cast_2d.get_collider().get_parent()
+	if colliding_object.has_method("player"):
+		target = colliding_object
+		
+		State = States.CHASE
+
+func state_controller(current_state: int) -> void:
+	State = current_state
+	
+	match State:
+		States.IDLE:
+			ray_cast_2d.enabled = true
+			detection_area.disabled = true
+		States.CHASE:
+			ray_cast_2d.enabled = false
+			detection_area.disabled = false
+
+
+func update_target_position() -> void:
+	if target == null:
+		target_position = target_last_position
+	else:
+		target_position = target.global_position
+
+func _on_detection_area_area_exited(_area: Area2D) -> void:
+	if _area.get_parent() == target:
+		target_last_position = Vector2(target.global_position)
+		target = null
+
+
+func _on_detection_area_area_entered(area: Area2D) -> void:
+	if area.get_parent().has_method("player"):
+		target = area.get_parent()

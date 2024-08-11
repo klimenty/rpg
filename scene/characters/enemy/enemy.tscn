@@ -11,13 +11,14 @@ region = Rect2(2.08165e-12, 2.08165e-12, 48, 96)
 size = Vector2(64, 64)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5qqs6"]
-radius = 160.0
+radius = 224.0
 
-[node name="Enemy" type="Node2D" node_paths=PackedStringArray("sprite_2d", "ray_cast_2d") groups=["enemies"]]
+[node name="Enemy" type="Node2D" node_paths=PackedStringArray("sprite_2d", "ray_cast_2d", "detection_area") groups=["enemies"]]
 position = Vector2(96, 96)
 script = ExtResource("1_wyk2o")
 sprite_2d = NodePath("Sprite2D")
 ray_cast_2d = NodePath("ConeOfSight")
+detection_area = NodePath("DetectionArea/CollisionShape2D")
 
 [node name="ConeOfSight" type="RayCast2D" parent="."]
 target_position = Vector2(2.08165e-12, 194)
@@ -42,3 +43,6 @@ collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
 shape = SubResource("CircleShape2D_5qqs6")
+
+[connection signal="area_entered" from="DetectionArea" to="." method="_on_detection_area_area_entered"]
+[connection signal="area_exited" from="DetectionArea" to="." method="_on_detection_area_area_exited"]

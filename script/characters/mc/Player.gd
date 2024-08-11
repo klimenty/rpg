@@ -145,3 +145,7 @@ func move(direction: Vector2) -> void:
 	global_position = tile_map.map_to_local(target_tile)
 	#Leave Sprite2D on current tile. Without it Sptite2D will teleport with player
 	sprite_2d.global_position = tile_map.map_to_local(current_tile)
+
+
+func player() -> void:
+	pass
