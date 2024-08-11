@@ -30,6 +30,11 @@ func _ready() -> void:
 
 #Handles all player inputs
 func _input(event: InputEvent) -> void:
+	#TEMPORARY!
+	#Exit game key
+	if event.is_action_pressed("escape"):
+		get_tree().quit()
+	
 	#Enable and disable sprint
 	if event.is_action_pressed("shift"):
 		MovementState = MovementStates.RUNNING
