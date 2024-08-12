@@ -78,3 +78,5 @@ tile_map = NodePath("../TileMap")
 position = Vector2(736, 288)
 player = NodePath("../Player")
 tile_map = NodePath("../TileMap")
+
+[editable path="Player"]
