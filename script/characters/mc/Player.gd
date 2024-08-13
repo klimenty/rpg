@@ -4,11 +4,9 @@ extends Node2D
 var key_buffer: Array[Vector2i] = []
 #Store direction value for movement
 var direction_vector: Vector2i = Vector2i.ZERO
-var last_direction_vector: Vector2i = Vector2i.ZERO
 #Store tilemap. TileMap is needed for movement so game will crash if you don't link it in scene
 @export var tile_map: TileMap
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
 @export var ray_cast_2d: RayCast2D
 #If is True, lock player movement and actions. But you still can sprint or sneaking
 var is_moving: bool = false
@@ -23,7 +21,6 @@ enum MovementStates {
 	SNEAKING
 }
 var MovementState: int = MovementStates.WALKING
-
 
 
 func _ready() -> void:
@@ -49,7 +46,6 @@ func _input(event: InputEvent) -> void:
 			MovementState = MovementStates.WALKING
 		else:
 			MovementState = MovementStates.SNEAKING
-
 
 	#Store all pressed movement buttons to key_buffer variable
 	if event.is_action_pressed("up"):
@@ -106,8 +102,6 @@ func move_state_machine() -> void:
 			speed = sneaking_speed
 
 
-
-
 #Check if next tile is walkable and move player to it
 func move(direction: Vector2i) -> void:
 	#Get current tile Vector2i
@@ -134,15 +128,6 @@ func move(direction: Vector2i) -> void:
 	#Leave Sprite2D on current tile. Without it Sptite2D will teleport with player
 	animated_sprite_2d.global_position = tile_map.map_to_local(current_tile)
 
-
-#func play_animation() -> void:
-	#if direction_vector == last_direction_vector:
-		#pass
-		#
-#
-	#match [state, direction_vector]:
-		#idle_start, Vector2i.UP:
-			#animated_sprite_2d.play("idle_up")
 
 func player() -> void:
 	pass
