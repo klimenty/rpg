@@ -7,100 +7,28 @@ var direction_vector: Vector2i = Vector2i.ZERO
 var last_direction_vector: Vector2i = Vector2i.ZERO
 #Store tilemap. TileMap is needed for movement so game will crash if you don't link it in scene
 @export var tile_map: TileMap
-#@export var sprite_2d: Sprite2D
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @export var ray_cast_2d: RayCast2D
 #If is True, lock player movement and actions. But you still can sprint or sneaking
 var is_moving: bool = false
-var is_sneaking: bool = false
 var speed: float = 3.0
 var cell_size: int = 64
 @export var walking_speed: float = 3.0
 @export var running_speed: float = 6.0
 @export var sneaking_speed: float = 1.5
-var main_StateMachine: LimboHSM
+enum MovementStates {
+	WALKING,
+	RUNNING,
+	SNEAKING
+}
+var MovementState: int = MovementStates.WALKING
+
 
 
 func _ready() -> void:
-	initiate_state_machine()
-	
-
-func initiate_state_machine() -> void:
-	main_StateMachine = LimboHSM.new()
-	add_child(main_StateMachine)
-	
-	var idle_state: LimboState = LimboState.new().named("idle").call_on_enter(idle_start).call_on_update(idle_update)
-	var walking_state: LimboState = LimboState.new().named("walking").call_on_enter(walking_start).call_on_update(walking_update)
-	var running_state: LimboState = LimboState.new().named("running").call_on_enter(running_start).call_on_update(running_update)
-	var sneaking_state: LimboState = LimboState.new().named("sneaking").call_on_enter(sneaking_start).call_on_update(sneaking_update)
-	
-	main_StateMachine.add_child(idle_state)
-	main_StateMachine.add_child(walking_state)
-	main_StateMachine.add_child(running_state)
-	main_StateMachine.add_child(sneaking_state)
-	
-	main_StateMachine.initial_state = idle_state
-	
-	main_StateMachine.add_transition(main_StateMachine.ANYSTATE, idle_state, &"state_ended")
-	main_StateMachine.add_transition(main_StateMachine.ANYSTATE, walking_state, &"to_walking")
-	main_StateMachine.add_transition(main_StateMachine.ANYSTATE, running_state, &"to_running")
-	main_StateMachine.add_transition(main_StateMachine.ANYSTATE, sneaking_state, &"to_sneaking")
-
-	main_StateMachine.initialize(self)
-	main_StateMachine.set_active(true)
-
-
-func idle_start() -> void:
-	if is_sneaking == true:
-		is_sneaking = false
-	print("last direction:", last_direction_vector)
-	match last_direction_vector:
-		Vector2i.ZERO:
-			animated_sprite_2d.play("idle_down")
-		Vector2i.UP:
-			animated_sprite_2d.play("idle_up")
-		Vector2i.DOWN:
-			animated_sprite_2d.play("idle_down")
-		Vector2i.LEFT:
-			animated_sprite_2d.play("idle_left")
-		Vector2i.RIGHT:
-			animated_sprite_2d.play("idle_right")
-func idle_update(_delta: float) -> void:
-	if key_buffer.size() > 0:
-		main_StateMachine.dispatch(&"to_walking")
-
-func walking_start() -> void:
-	if is_sneaking == true:
-		is_sneaking = false
-	speed = walking_speed
-	
-	if direction_vector != last_direction_vector:
-		last_direction_vector = direction_vector
-	match last_direction_vector:
-		Vector2i.UP:
-			animated_sprite_2d.play("walking_up")
-		Vector2i.DOWN:
-			animated_sprite_2d.play("walking_down")
-		Vector2i.LEFT:
-			animated_sprite_2d.play("walking_left")
-		Vector2i.RIGHT:
-			animated_sprite_2d.play("walking_right")
-func walking_update(_delta: float) -> void:
-	if key_buffer.size() == 0:
-		main_StateMachine.dispatch(&"state_ended")
-
-func running_start() -> void:
-	if is_sneaking == true:
-		is_sneaking = false
-	speed = running_speed
-func running_update(_delta: float) -> void:
 	pass
-	
-func sneaking_start() -> void:
-	speed = sneaking_speed
-func sneaking_update(_delta: float) -> void:
-	pass
+
 
 #Handles all player inputs
 func _input(event: InputEvent) -> void:
@@ -111,18 +39,17 @@ func _input(event: InputEvent) -> void:
 	
 	#Enable and disable sprint
 	if event.is_action_pressed("shift"):
-		main_StateMachine.dispatch(&"to_running")
+		MovementState = MovementStates.RUNNING
 	if event.is_action_released("shift"):
-		main_StateMachine.dispatch(&"to_walking")
+		MovementState = MovementStates.WALKING
 
 	#Enable and disable sneaking
 	if event.is_action_pressed("ctrl"):
-		if is_sneaking:
-			is_sneaking = false
-			main_StateMachine.dispatch(&"to_walking")
+		if MovementState == MovementStates.SNEAKING:
+			MovementState = MovementStates.WALKING
 		else:
-			is_sneaking = true
-			main_StateMachine.dispatch(&"to_sneaking")
+			MovementState = MovementStates.SNEAKING
+
 
 	#Store all pressed movement buttons to key_buffer variable
 	if event.is_action_pressed("up"):
@@ -147,6 +74,8 @@ func _input(event: InputEvent) -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta: float) -> void:
+	#Change speed based on MovementState
+	move_state_machine()
 
 	#Checks if player is currently in moving animation.	If True, play movement animation and stop it when sprite reaches player position.
 	if is_moving:
@@ -164,6 +93,19 @@ func _physics_process(_delta: float) -> void:
 		else:
 			direction_vector = Vector2i.ZERO
 		move(direction_vector)
+
+
+#Change speed based on MovementState
+func move_state_machine() -> void:
+	match MovementState:
+		MovementStates.WALKING:
+			speed = walking_speed
+		MovementStates.RUNNING:
+			speed = running_speed
+		MovementStates.SNEAKING:
+			speed = sneaking_speed
+
+
 
 
 #Check if next tile is walkable and move player to it
