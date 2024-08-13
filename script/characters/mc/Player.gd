@@ -54,6 +54,18 @@ func initiate_state_machine() -> void:
 func idle_start() -> void:
 	if is_sneaking == true:
 		is_sneaking = false
+	print("last direction:", last_direction_vector)
+	match last_direction_vector:
+		Vector2i.ZERO:
+			animated_sprite_2d.play("idle_down")
+		Vector2i.UP:
+			animated_sprite_2d.play("idle_up")
+		Vector2i.DOWN:
+			animated_sprite_2d.play("idle_down")
+		Vector2i.LEFT:
+			animated_sprite_2d.play("idle_left")
+		Vector2i.RIGHT:
+			animated_sprite_2d.play("idle_right")
 func idle_update(_delta: float) -> void:
 	if key_buffer.size() > 0:
 		main_StateMachine.dispatch(&"to_walking")
@@ -62,6 +74,18 @@ func walking_start() -> void:
 	if is_sneaking == true:
 		is_sneaking = false
 	speed = walking_speed
+	
+	if direction_vector != last_direction_vector:
+		last_direction_vector = direction_vector
+	match last_direction_vector:
+		Vector2i.UP:
+			animated_sprite_2d.play("walking_up")
+		Vector2i.DOWN:
+			animated_sprite_2d.play("walking_down")
+		Vector2i.LEFT:
+			animated_sprite_2d.play("walking_left")
+		Vector2i.RIGHT:
+			animated_sprite_2d.play("walking_right")
 func walking_update(_delta: float) -> void:
 	if key_buffer.size() == 0:
 		main_StateMachine.dispatch(&"state_ended")
@@ -137,8 +161,6 @@ func _physics_process(_delta: float) -> void:
 	if not is_moving:
 		if key_buffer.size() > 0:
 			direction_vector = key_buffer.back()
-			if last_direction_vector != direction_vector:
-				last_direction_vector = direction_vector
 		else:
 			direction_vector = Vector2i.ZERO
 		move(direction_vector)
@@ -170,6 +192,15 @@ func move(direction: Vector2i) -> void:
 	#Leave Sprite2D on current tile. Without it Sptite2D will teleport with player
 	animated_sprite_2d.global_position = tile_map.map_to_local(current_tile)
 
+
+#func play_animation() -> void:
+	#if direction_vector == last_direction_vector:
+		#pass
+		#
+#
+	#match [state, direction_vector]:
+		#idle_start, Vector2i.UP:
+			#animated_sprite_2d.play("idle_up")
 
 func player() -> void:
 	pass
