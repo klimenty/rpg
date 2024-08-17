@@ -10,6 +10,7 @@ var last_direction_vector: Vector2i
 @onready var sprite_2d: Sprite2D = $Sprite2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @export var ray_cast_2d: RayCast2D
+@onready var input_gatherer: InputGatherer = $Input/InputGatherer
 #If is True, lock player movement and actions. But you still can sprint or sneaking
 var is_moving: bool = false
 var speed: float = 3.0
@@ -31,50 +32,50 @@ func _ready() -> void:
 
 
 #Handles all player inputs
-func _input(event: InputEvent) -> void:
-	#TEMPORARY!
-	#Exit game key
-	if event.is_action_pressed("escape"):
-		get_tree().quit()
-	
-	#Enable and disable sprint
-	if event.is_action_pressed("shift"):
-		MovementState = MovementStates.RUN
-	if event.is_action_released("shift"):
-		MovementState = MovementStates.WALK
-
-	#Enable and disable sneaking
-	if event.is_action_pressed("ctrl"):
-		if MovementState == MovementStates.SNEAK:
-			MovementState = MovementStates.WALK
-		else:
-			MovementState = MovementStates.SNEAK
-
-	#Store all pressed movement buttons to key_buffer variable
-	if event.is_action_pressed("up"):
-		key_buffer.append(Vector2i.UP)
-	elif event.is_action_pressed("down"):
-		key_buffer.append(Vector2i.DOWN)
-	elif event.is_action_pressed("left"):
-		key_buffer.append(Vector2i.LEFT)
-	elif event.is_action_pressed("right"):
-		key_buffer.append(Vector2i.RIGHT)
-
-	#Delete buttons from key_buffer if button was released
-	if event.is_action_released("up"):
-		key_buffer.erase(Vector2i.UP)
-	elif event.is_action_released("down"):
-		key_buffer.erase(Vector2i.DOWN)
-	elif event.is_action_released("left"):
-		key_buffer.erase(Vector2i.LEFT)
-	elif event.is_action_released("right"):
-		key_buffer.erase(Vector2i.RIGHT)
-
+#func _input(event: InputEvent) -> void:
+	##TEMPORARY!
+	##Exit game key
+	#if event.is_action_pressed("escape"):
+		#get_tree().quit()
+	#
+	##Enable and disable sprint
+	#if event.is_action_pressed("shift"):
+		#MovementState = MovementStates.RUN
+	#if event.is_action_released("shift"):
+		#MovementState = MovementStates.WALK
+#
+	##Enable and disable sneaking
+	#if event.is_action_pressed("ctrl"):
+		#if MovementState == MovementStates.SNEAK:
+			#MovementState = MovementStates.WALK
+		#else:
+			#MovementState = MovementStates.SNEAK
+#
+	##Store all pressed movement buttons to key_buffer variable
+	#if event.is_action_pressed("up"):
+		#key_buffer.append(Vector2i.UP)
+	#elif event.is_action_pressed("down"):
+		#key_buffer.append(Vector2i.DOWN)
+	#elif event.is_action_pressed("left"):
+		#key_buffer.append(Vector2i.LEFT)
+	#elif event.is_action_pressed("right"):
+		#key_buffer.append(Vector2i.RIGHT)
+#
+	##Delete buttons from key_buffer if button was released
+	#if event.is_action_released("up"):
+		#key_buffer.erase(Vector2i.UP)
+	#elif event.is_action_released("down"):
+		#key_buffer.erase(Vector2i.DOWN)
+	#elif event.is_action_released("left"):
+		#key_buffer.erase(Vector2i.LEFT)
+	#elif event.is_action_released("right"):
+		#key_buffer.erase(Vector2i.RIGHT)
+#
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta: float) -> void:
+	var input_package: InputPackage = input_gatherer.gather_input()
 	#Change speed based on MovementState
-	move_state_machine()
 
 	#Checks if player is currently in moving animation.	If True, play movement animation and stop it when sprite reaches player position.
 	if is_moving:
@@ -87,30 +88,23 @@ func _physics_process(_delta: float) -> void:
 
 	#Checks if player is _not_ in moving animation.	
 	if not is_moving:
-		if key_buffer.size() > 0:
-			direction_vector = key_buffer.back()
-			last_direction_vector = direction_vector
-			if MovementState == MovementStates.IDLE:
-				MovementState = MovementStates.WALK
-		else:
-			direction_vector = Vector2i.ZERO
+		direction_vector = input_package.input_direction
+		move_state_machine(input_package.actions)
 		move(direction_vector)
 		
-	if direction_vector == Vector2i.ZERO and MovementState != MovementStates.SNEAK:
-		MovementState = MovementStates.IDLE
 	
-	print(direction_vector, last_direction_vector)
+	
 
 
 #Change speed based on MovementState
-func move_state_machine() -> void:
-	match MovementState:
-		MovementStates.WALK:
-			speed = walk_speed
-		MovementStates.RUN:
-			speed = run_speed
-		MovementStates.SNEAK:
-			speed = sneak_speed
+func move_state_machine(actions) -> void:
+	if actions.has("run"):
+		speed = run_speed
+	elif actions.has("sneak"):
+		speed = sneak_speed
+	elif actions.has("walk"):
+		speed = walk_speed
+	
 
 
 #Check if next tile is walkable and move player to it
