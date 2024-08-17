@@ -31,46 +31,6 @@ func _ready() -> void:
 	pass
 
 
-#Handles all player inputs
-#func _input(event: InputEvent) -> void:
-	##TEMPORARY!
-	##Exit game key
-	#if event.is_action_pressed("escape"):
-		#get_tree().quit()
-	#
-	##Enable and disable sprint
-	#if event.is_action_pressed("shift"):
-		#MovementState = MovementStates.RUN
-	#if event.is_action_released("shift"):
-		#MovementState = MovementStates.WALK
-#
-	##Enable and disable sneaking
-	#if event.is_action_pressed("ctrl"):
-		#if MovementState == MovementStates.SNEAK:
-			#MovementState = MovementStates.WALK
-		#else:
-			#MovementState = MovementStates.SNEAK
-#
-	##Store all pressed movement buttons to key_buffer variable
-	#if event.is_action_pressed("up"):
-		#key_buffer.append(Vector2i.UP)
-	#elif event.is_action_pressed("down"):
-		#key_buffer.append(Vector2i.DOWN)
-	#elif event.is_action_pressed("left"):
-		#key_buffer.append(Vector2i.LEFT)
-	#elif event.is_action_pressed("right"):
-		#key_buffer.append(Vector2i.RIGHT)
-#
-	##Delete buttons from key_buffer if button was released
-	#if event.is_action_released("up"):
-		#key_buffer.erase(Vector2i.UP)
-	#elif event.is_action_released("down"):
-		#key_buffer.erase(Vector2i.DOWN)
-	#elif event.is_action_released("left"):
-		#key_buffer.erase(Vector2i.LEFT)
-	#elif event.is_action_released("right"):
-		#key_buffer.erase(Vector2i.RIGHT)
-#
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta: float) -> void:
@@ -91,9 +51,6 @@ func _physics_process(_delta: float) -> void:
 		direction_vector = input_package.input_direction
 		move_state_machine(input_package.actions)
 		move(direction_vector)
-		
-	
-	
 
 
 #Change speed based on MovementState
@@ -104,7 +61,6 @@ func move_state_machine(actions) -> void:
 		speed = sneak_speed
 	elif actions.has("walk"):
 		speed = walk_speed
-	
 
 
 #Check if next tile is walkable and move player to it
