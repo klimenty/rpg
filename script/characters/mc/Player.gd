@@ -4,9 +4,11 @@ extends Node2D
 var key_buffer: Array[Vector2i] = []
 #Store direction value for movement
 var direction_vector: Vector2i = Vector2i.ZERO
+var last_direction_vector: Vector2i
 #Store tilemap. TileMap is needed for movement so game will crash if you don't link it in scene
 @export var tile_map: TileMap
 @onready var sprite_2d: Sprite2D = $Sprite2D
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 @export var ray_cast_2d: RayCast2D
 #If is True, lock player movement and actions. But you still can sprint or sneaking
 var is_moving: bool = false
@@ -16,6 +18,7 @@ var cell_size: int = 64
 @export var run_speed: float = 6.0
 @export var sneak_speed: float = 1.5
 enum MovementStates {
+	IDLE,
 	WALK,
 	RUN,
 	SNEAK
@@ -86,9 +89,17 @@ func _physics_process(_delta: float) -> void:
 	if not is_moving:
 		if key_buffer.size() > 0:
 			direction_vector = key_buffer.back()
+			last_direction_vector = direction_vector
+			if MovementState == MovementStates.IDLE:
+				MovementState = MovementStates.WALK
 		else:
 			direction_vector = Vector2i.ZERO
 		move(direction_vector)
+		
+	if direction_vector == Vector2i.ZERO and MovementState != MovementStates.SNEAK:
+		MovementState = MovementStates.IDLE
+	
+	print(direction_vector, last_direction_vector)
 
 
 #Change speed based on MovementState
