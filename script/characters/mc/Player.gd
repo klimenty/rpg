@@ -6,21 +6,21 @@ var key_buffer: Array[Vector2i] = []
 var direction_vector: Vector2i = Vector2i.ZERO
 #Store tilemap. TileMap is needed for movement so game will crash if you don't link it in scene
 @export var tile_map: TileMap
-@onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@onready var sprite_2d: Sprite2D = $Sprite2D
 @export var ray_cast_2d: RayCast2D
 #If is True, lock player movement and actions. But you still can sprint or sneaking
 var is_moving: bool = false
 var speed: float = 3.0
 var cell_size: int = 64
-@export var walking_speed: float = 3.0
-@export var running_speed: float = 6.0
-@export var sneaking_speed: float = 1.5
+@export var walk_speed: float = 3.0
+@export var run_speed: float = 6.0
+@export var sneak_speed: float = 1.5
 enum MovementStates {
-	WALKING,
-	RUNNING,
-	SNEAKING
+	WALK,
+	RUN,
+	SNEAK
 }
-var MovementState: int = MovementStates.WALKING
+var MovementState: int = MovementStates.WALK
 
 
 func _ready() -> void:
@@ -36,16 +36,16 @@ func _input(event: InputEvent) -> void:
 	
 	#Enable and disable sprint
 	if event.is_action_pressed("shift"):
-		MovementState = MovementStates.RUNNING
+		MovementState = MovementStates.RUN
 	if event.is_action_released("shift"):
-		MovementState = MovementStates.WALKING
+		MovementState = MovementStates.WALK
 
 	#Enable and disable sneaking
 	if event.is_action_pressed("ctrl"):
-		if MovementState == MovementStates.SNEAKING:
-			MovementState = MovementStates.WALKING
+		if MovementState == MovementStates.SNEAK:
+			MovementState = MovementStates.WALK
 		else:
-			MovementState = MovementStates.SNEAKING
+			MovementState = MovementStates.SNEAK
 
 	#Store all pressed movement buttons to key_buffer variable
 	if event.is_action_pressed("up"):
@@ -77,8 +77,8 @@ func _physics_process(_delta: float) -> void:
 	if is_moving:
 		#Move animated_sprite_2d to player position. Speed is determined by speed variable. 
 		#If should be above destination check to prevent movement stuttering
-		animated_sprite_2d.global_position = animated_sprite_2d.global_position.move_toward(global_position, speed)
-		if global_position == animated_sprite_2d.global_position:
+		sprite_2d.global_position = sprite_2d.global_position.move_toward(global_position, speed)
+		if global_position == sprite_2d.global_position:
 			is_moving = false
 			return
 
@@ -94,12 +94,12 @@ func _physics_process(_delta: float) -> void:
 #Change speed based on MovementState
 func move_state_machine() -> void:
 	match MovementState:
-		MovementStates.WALKING:
-			speed = walking_speed
-		MovementStates.RUNNING:
-			speed = running_speed
-		MovementStates.SNEAKING:
-			speed = sneaking_speed
+		MovementStates.WALK:
+			speed = walk_speed
+		MovementStates.RUN:
+			speed = run_speed
+		MovementStates.SNEAK:
+			speed = sneak_speed
 
 
 #Check if next tile is walkable and move player to it
@@ -126,7 +126,7 @@ func move(direction: Vector2i) -> void:
 	#Change player position to target tile
 	global_position = tile_map.map_to_local(target_tile)
 	#Leave Sprite2D on current tile. Without it Sptite2D will teleport with player
-	animated_sprite_2d.global_position = tile_map.map_to_local(current_tile)
+	sprite_2d.global_position = tile_map.map_to_local(current_tile)
 
 
 func player() -> void:
