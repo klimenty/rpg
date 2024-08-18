@@ -1,8 +1,7 @@
-[gd_scene load_steps=21 format=3 uid="uid://bxljvxnni0q0q"]
+[gd_scene load_steps=20 format=3 uid="uid://bxljvxnni0q0q"]
 
 [ext_resource type="Script" path="res://script/characters/mc/Player.gd" id="1_fx1gi"]
 [ext_resource type="Texture2D" uid="uid://dl2s06nu1pleb" path="res://asset/characters/mc/sprite.png" id="2_ubhpp"]
-[ext_resource type="Script" path="res://scene/player/InputPackage.gd" id="3_istrd"]
 [ext_resource type="Script" path="res://scene/player/InputGatherer.gd" id="3_u4gfl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7tica"]
@@ -266,6 +265,3 @@ libraries = {
 
 [node name="InputGatherer" type="Node" parent="Input"]
 script = ExtResource("3_u4gfl")
-
-[node name="InputPackage" type="Node" parent="Input"]
-script = ExtResource("3_istrd")

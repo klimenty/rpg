@@ -54,7 +54,7 @@ func _physics_process(_delta: float) -> void:
 
 
 #Change speed based on MovementState
-func move_state_machine(actions) -> void:
+func move_state_machine(actions: Array[String]) -> void:
 	if actions.has("run"):
 		speed = run_speed
 	elif actions.has("sneak"):

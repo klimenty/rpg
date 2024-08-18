@@ -45,7 +45,7 @@ func _input(event: InputEvent) -> void:
 
 
 func gather_input() -> InputPackage:
-	var new_input = InputPackage.new()
+	var new_input: InputPackage = InputPackage.new()
 	
 	new_input.actions.append("idle")
 	
