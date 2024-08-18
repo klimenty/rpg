@@ -91,7 +91,7 @@ func move() -> void:
 
 	#Last value in the path is player position. We stop movement so character won't try to get to occupied position
 	if path.size() == 1:
-		print("I have arrived")
+		#print("I have arrived")
 		state_controller(States.IDLE)
 		return
 

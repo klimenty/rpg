@@ -69,6 +69,9 @@ position = Vector2(32, 96)
 scale = Vector2(1, 1)
 tile_map = NodePath("../TileMap")
 
+[node name="Sprite2D" parent="Player" index="2"]
+modulate = Color(1, 1, 1, 0.784314)
+
 [node name="Enemy" parent="." node_paths=PackedStringArray("player", "tile_map") instance=ExtResource("4_ro0sy")]
 position = Vector2(352, 96)
 player = NodePath("../Player")

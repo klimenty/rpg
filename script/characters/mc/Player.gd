@@ -1,9 +1,7 @@
 extends Node2D
 
-#Store all movement Inputs. Last one is used to update direction
-var key_buffer: Array[Vector2i] = []
 #Store direction value for movement
-var direction_vector: Vector2i = Vector2i.ZERO
+var direction_vector: Vector2i = Vector2i.DOWN
 var last_direction_vector: Vector2i
 #Store tilemap. TileMap is needed for movement so game will crash if you don't link it in scene
 @export var tile_map: TileMap
@@ -18,18 +16,11 @@ var cell_size: int = 64
 @export var walk_speed: float = 3.0
 @export var run_speed: float = 6.0
 @export var sneak_speed: float = 1.5
-enum MovementStates {
-	IDLE,
-	WALK,
-	RUN,
-	SNEAK
-}
-var MovementState: int = MovementStates.WALK
 
 
 func _ready() -> void:
+	animation_player.play("idle_down")
 	pass
-
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -49,8 +40,16 @@ func _physics_process(_delta: float) -> void:
 	#Checks if player is _not_ in moving animation.	
 	if not is_moving:
 		direction_vector = input_package.input_direction
+		if direction_vector != Vector2i.ZERO:
+			last_direction_vector = direction_vector
 		move_state_machine(input_package.actions)
 		move(direction_vector)
+		print(input_package.actions, input_package.input_direction)
+	
+	#if input_package.actions.is_empty():
+		#return
+	#else:
+	animation(input_package.actions, last_direction_vector)
 
 
 #Change speed based on MovementState
@@ -88,6 +87,42 @@ func move(direction: Vector2i) -> void:
 	global_position = tile_map.map_to_local(target_tile)
 	#Leave Sprite2D on current tile. Without it Sptite2D will teleport with player
 	sprite_2d.global_position = tile_map.map_to_local(current_tile)
+
+
+func animation(states: Array[String], direction: Vector2i) -> void:
+	var current_animation: String = animation_player.current_animation
+	var next_animation: String
+	var is_sneaking: bool = false
+	var state: String
+	
+	if states[-1] == "sneak":
+		is_sneaking = true
+		state = states[-2]
+	else:
+		is_sneaking = false
+		state = states[-1]
+	
+	match direction:
+		Vector2i.ZERO:
+			next_animation = state + "_down"
+		Vector2i.DOWN:
+			next_animation = state + "_down"
+		Vector2i.UP:
+			next_animation = state + "_up"
+		Vector2i.LEFT:
+			next_animation = state + "_left"
+		Vector2i.RIGHT:
+			next_animation = state + "_right"
+	
+	if is_sneaking:
+		sprite_2d.modulate = Color(1, 1, 1, 0.5)
+	else:
+		sprite_2d.modulate = Color(1, 1, 1, 1)
+	
+	if current_animation == next_animation:
+		return
+	
+	animation_player.play(next_animation)
 
 
 func player() -> void:
