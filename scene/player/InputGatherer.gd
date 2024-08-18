@@ -59,7 +59,10 @@ func gather_input() -> InputPackage:
 				new_input.actions.append("run")
 	
 	if action_buffer.has("sneak"):
-		new_input.actions.append("sneak")
+		if action_buffer.has("run"):
+			action_buffer.erase("sneak")
+		else:
+			new_input.actions.append("sneak")
 
 	#print(new_input.input_direction)
 	return new_input
