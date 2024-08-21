@@ -16,11 +16,11 @@ var cell_size: int = 64
 @export var walk_speed: float = 3.0
 @export var run_speed: float = 6.0
 @export var sneak_speed: float = 1.5
+var last_state: String
 
 
 func _ready() -> void:
-	animation_player.play("idle_down")
-	pass
+	last_state = input_gatherer.gather_input().actions.back()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -42,24 +42,25 @@ func _physics_process(_delta: float) -> void:
 		direction_vector = input_package.input_direction
 		if direction_vector != Vector2i.ZERO:
 			last_direction_vector = direction_vector
+			move(direction_vector)
 		move_state_machine(input_package.actions)
-		move(direction_vector)
-		print(input_package.actions, input_package.input_direction)
-	
-	#if input_package.actions.is_empty():
-		#return
-	#else:
+		
+		
+
 	animation(input_package.actions, last_direction_vector)
+	print(is_moving)
 
 
 #Change speed based on MovementState
 func move_state_machine(actions: Array[String]) -> void:
 	if actions.has("run"):
 		speed = run_speed
+		last_state = "run"
 	elif actions.has("sneak"):
 		speed = sneak_speed
 	elif actions.has("walk"):
 		speed = walk_speed
+		last_state = "walk"
 
 
 #Check if next tile is walkable and move player to it
@@ -95,7 +96,9 @@ func animation(states: Array[String], direction: Vector2i) -> void:
 	var is_sneaking: bool = false
 	var state: String
 	
-	if states[-1] == "sneak":
+	if is_moving:
+		state = last_state
+	elif states[-1] == "sneak":
 		is_sneaking = true
 		state = states[-2]
 	else:
@@ -121,7 +124,7 @@ func animation(states: Array[String], direction: Vector2i) -> void:
 	
 	if current_animation == next_animation:
 		return
-	
+
 	animation_player.play(next_animation)
 
 

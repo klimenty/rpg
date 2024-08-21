@@ -1,8 +1,8 @@
-[gd_scene load_steps=19 format=3 uid="uid://bxljvxnni0q0q"]
+[gd_scene load_steps=23 format=3 uid="uid://bxljvxnni0q0q"]
 
 [ext_resource type="Script" path="res://script/characters/mc/Player.gd" id="1_fx1gi"]
 [ext_resource type="Texture2D" uid="uid://dl2s06nu1pleb" path="res://asset/characters/mc/sprite.png" id="2_ubhpp"]
-[ext_resource type="Script" path="res://scene/player/InputGatherer.gd" id="3_u4gfl"]
+[ext_resource type="Script" path="res://script/characters/mc/InputGatherer.gd" id="3_u4gfl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7tica"]
 size = Vector2(64, 64)
