@@ -3,8 +3,8 @@ class_name Idle
 
 #transition logic
 func check_relevance(input: InputPackage) -> String:
-	if input.actions.has("run"):
-		return "run"
+	#if input.actions.has("run"):
+		#return "run"
 	if input.actions.has("walk"):
 		return "walk"
 	return "ok"
