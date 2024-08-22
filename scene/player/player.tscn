@@ -3,6 +3,10 @@
 [ext_resource type="Script" path="res://script/characters/mc/Player.gd" id="1_fx1gi"]
 [ext_resource type="Texture2D" uid="uid://dl2s06nu1pleb" path="res://asset/characters/mc/sprite.png" id="2_ubhpp"]
 [ext_resource type="Script" path="res://script/characters/mc/InputGatherer.gd" id="3_u4gfl"]
+[ext_resource type="Script" path="res://script/characters/stateMachine/StateMachine.gd" id="4_tf1k3"]
+[ext_resource type="Script" path="res://script/characters/stateMachine/Idle.gd" id="5_cug4r"]
+[ext_resource type="Script" path="res://script/characters/stateMachine/Walk.gd" id="6_a5r2w"]
+[ext_resource type="Script" path="res://script/characters/stateMachine/Run.gd" id="7_5gtqx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7tica"]
 size = Vector2(64, 64)
@@ -238,7 +242,6 @@ texture = SubResource("AtlasTexture_2doch")
 offset = Vector2(2.08165e-12, -32)
 hframes = 16
 vframes = 8
-frame = 7
 
 [node name="Camera2D" type="Camera2D" parent="Sprite2D"]
 
@@ -251,3 +254,15 @@ libraries = {
 
 [node name="InputGatherer" type="Node" parent="Input"]
 script = ExtResource("3_u4gfl")
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("4_tf1k3")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("5_cug4r")
+
+[node name="Walk" type="Node" parent="StateMachine"]
+script = ExtResource("6_a5r2w")
+
+[node name="Run" type="Node" parent="StateMachine"]
+script = ExtResource("7_5gtqx")
