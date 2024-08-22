@@ -3,7 +3,7 @@ class_name Run
 
 #transition logic
 func check_relevance(input: InputPackage) -> String:
-	if input.input_direction == Vector2.ZERO:
+	if input.input_direction == Vector2i.ZERO:
 		return "idle"
 	return "ok"
 

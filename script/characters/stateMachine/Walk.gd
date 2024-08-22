@@ -1,7 +1,7 @@
 extends BaseState
 class_name Walk
 
-const SPEED: int = 5
+const SPEED: int = 100
 
 
 func check_relevance(input : InputPackage):
@@ -26,7 +26,7 @@ func update(input : InputPackage, delta : float):
 
 func velocity_by_input(input : InputPackage, delta : float) -> Vector2:
 	var new_velocity = player.velocity
-	var direction = (player.transform * Vector2(input.input_direction.x, input.input_direction.y)).normalized()
+	var direction = (Vector2i(input.input_direction.x, input.input_direction.y))
 	print(direction)
 	new_velocity.x = direction.x * SPEED
 	new_velocity.y = direction.y * SPEED

@@ -1,7 +1,7 @@
 extends Node
 class_name InputGatherer
 
-var movement_buffer: Array[Vector2]
+var movement_buffer: Array[Vector2i]
 var action_buffer: Array[String]
 
 func _input(event: InputEvent) -> void:
@@ -25,22 +25,22 @@ func _input(event: InputEvent) -> void:
 	
 	
 	if event.is_action_pressed("up"):
-		movement_buffer.append(Vector2.UP)
+		movement_buffer.append(Vector2i.UP)
 	elif event.is_action_pressed("down"):
-		movement_buffer.append(Vector2.DOWN)
+		movement_buffer.append(Vector2i.DOWN)
 	elif event.is_action_pressed("left"):
-		movement_buffer.append(Vector2.LEFT)
+		movement_buffer.append(Vector2i.LEFT)
 	elif event.is_action_pressed("right"):
-		movement_buffer.append(Vector2.RIGHT)
+		movement_buffer.append(Vector2i.RIGHT)
 		
 	if event.is_action_released("up"):
-		movement_buffer.erase(Vector2.UP)
+		movement_buffer.erase(Vector2i.UP)
 	elif event.is_action_released("down"):
-		movement_buffer.erase(Vector2.DOWN)
+		movement_buffer.erase(Vector2i.DOWN)
 	elif event.is_action_released("left"):
-		movement_buffer.erase(Vector2.LEFT)
+		movement_buffer.erase(Vector2i.LEFT)
 	elif event.is_action_released("right"):
-		movement_buffer.erase(Vector2.RIGHT)
+		movement_buffer.erase(Vector2i.RIGHT)
 	
 
 
@@ -50,12 +50,12 @@ func gather_input() -> InputPackage:
 	new_input.actions.append("idle")
 	
 	if movement_buffer.is_empty():
-		new_input.input_direction = Vector2.ZERO
+		new_input.input_direction = Vector2i.ZERO
 	else:
 		print(movement_buffer.back())
 		new_input.input_direction = movement_buffer.back()
 		print(new_input.input_direction)
-		if new_input.input_direction != Vector2.ZERO:
+		if new_input.input_direction != Vector2i.ZERO:
 			new_input.actions.append("walk")
 			#if action_buffer.has("run"):		# sprint is hidden here to avoid standing in place and sprinting
 				#new_input.actions.append("run")
