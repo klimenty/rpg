@@ -3,6 +3,7 @@ class_name InputGatherer
 
 var movement_buffer: Array[Vector2i]
 var action_buffer: Array[String]
+var attack_action_buffer: Array[String]
 
 func _input(event: InputEvent) -> void:
 	#TEMPORARY!
@@ -22,8 +23,16 @@ func _input(event: InputEvent) -> void:
 			action_buffer.erase("sneak")
 		else:
 			action_buffer.append("sneak")
-	
-	
+
+	if event.is_action_pressed("a"):
+		attack_action_buffer.append("primary_attack_L")
+	if event.is_action_pressed("s"):
+		attack_action_buffer.append("secondary_attack_L")
+	if event.is_action_pressed("d"):
+		attack_action_buffer.append("primary_attack_R")
+	if event.is_action_pressed("f"):
+		attack_action_buffer.append("secondary_attack_L")
+
 	if event.is_action_pressed("up"):
 		movement_buffer.append(Vector2i.UP)
 	elif event.is_action_pressed("down"):
@@ -41,29 +50,27 @@ func _input(event: InputEvent) -> void:
 		movement_buffer.erase(Vector2i.LEFT)
 	elif event.is_action_released("right"):
 		movement_buffer.erase(Vector2i.RIGHT)
-	
 
 
 func gather_input() -> InputPackage:
 	var new_input: InputPackage = InputPackage.new()
-	
-	
-	
+
 	if action_buffer.has("sneak"):
 		new_input.actions.append("sneak")
-	
+
+	if attack_action_buffer.is_empty() == false:
+		new_input.combat_actions.append(attack_action_buffer.back())
+		attack_action_buffer = []
+
 	if movement_buffer.is_empty():
 		new_input.input_direction = Vector2i.ZERO
-		new_input.actions.append("idle")
 	else:
 		new_input.input_direction = movement_buffer.back()
 		new_input.actions.append("walk")
 		if action_buffer.has("run"):
 			new_input.actions.append("run")
-			
-	#print("Actions: %s" % [action_buffer])
-	#print("Movement: %s" % [movement_buffer])
-	#print("New_input: %s" % [new_input.actions])
-	
+
+	if new_input.actions.is_empty():
+		new_input.actions.append("idle")
 
 	return new_input

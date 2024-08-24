@@ -5,6 +5,8 @@ class_name BaseState
 # all-move flags and variables here
 var player: CharacterBody2D
 
+var animation : String
+var move_name : String
 
 static var states_priority : Dictionary = {
 	"idle": 1,

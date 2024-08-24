@@ -1,13 +1,14 @@
 extends BaseState
 class_name Idle
 
+
+func _ready() -> void:
+	animation = "idle"
+
 #transition logic
 func check_relevance(input: InputPackage) -> String:
-	#if input.actions.has("run"):
-		#return "run"
-	if input.actions.has("walk"):
-		return "walk"
-	return "ok"
+	input.actions.sort_custom(states_priority_sort)
+	return input.actions[0]
 	
 
 func check_name() -> String:
@@ -20,7 +21,7 @@ func update(_input: InputPackage, _delta: float) -> void:
 
 
 func on_enter_state() -> void:
-	pass
+	player.velocity = Vector2i.ZERO
 
 
 func on_exit_state() -> void:

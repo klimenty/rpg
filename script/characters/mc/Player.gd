@@ -1,10 +1,12 @@
-extends Node
+extends CharacterBody2D
 
 
-@onready var input_gatherer: InputGatherer = $Input/InputGatherer
-@onready var state_machine: PlayerStateMachine = $PlayerStateMachine
+@onready var input_gatherer: InputGatherer = $Input
+@onready var model: PlayerStateMachine = $Model
 
 
 func _physics_process(delta: float) -> void:
 	var input: InputPackage = input_gatherer.gather_input()
-	state_machine.update(input, delta)
+	model.update(input, delta)
+
+	input.queue_free()

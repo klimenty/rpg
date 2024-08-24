@@ -8,10 +8,10 @@ var current_state: BaseState
 
 
 @onready var states: Dictionary = {
-	"idle" : $Idle,
-	"walk" : $Walk,
-	"run": $Run,
-	"sneak": $Sneak
+	"idle" : $States/Idle,
+	"walk" : $States/Walk,
+	"run": $States/Run,
+	"sneak": $States/Sneak
 }
 
 var animation_direction: String = "DOWN"
