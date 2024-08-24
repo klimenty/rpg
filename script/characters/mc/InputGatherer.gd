@@ -52,9 +52,7 @@ func gather_input() -> InputPackage:
 	if movement_buffer.is_empty():
 		new_input.input_direction = Vector2i.ZERO
 	else:
-		print(movement_buffer.back())
 		new_input.input_direction = movement_buffer.back()
-		print(new_input.input_direction)
 		if new_input.input_direction != Vector2i.ZERO:
 			new_input.actions.append("walk")
 			#if action_buffer.has("run"):		# sprint is hidden here to avoid standing in place and sprinting

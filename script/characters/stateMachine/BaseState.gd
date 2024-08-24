@@ -20,17 +20,17 @@ static func states_priority_sort(a : String, b : String) -> bool:
 		return false
 
 
-func check_relevance(input : InputPackage) -> String:
+func check_relevance(_input : InputPackage) -> String:
 	print_debug("error, implement the check_relevance function on your state")
 	return "error, implement the check_relevance function on your state"
 
 
-func update(input : InputPackage, delta : float):
+func update(_input : InputPackage, _delta : float) -> void:
 	pass
 
 
-func on_enter_state():
+func on_enter_state() -> void:
 	pass
 
-func on_exit_state():
+func on_exit_state() -> void:
 	pass
