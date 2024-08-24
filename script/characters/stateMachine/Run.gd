@@ -4,8 +4,12 @@ class_name Run
 #transition logic
 func check_relevance(input: InputPackage) -> String:
 	if input.input_direction == Vector2i.ZERO:
-		return "idle"
+		return "run"
 	return "ok"
+
+
+func check_name() -> String:
+	return "run"
 
 
 #updating state

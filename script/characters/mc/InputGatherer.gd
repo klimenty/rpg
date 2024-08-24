@@ -11,17 +11,17 @@ func _input(event: InputEvent) -> void:
 		get_tree().quit()
 	
 	#Enable and disable sprint
-	#if event.is_action_pressed("shift"):
-		#action_buffer.append("run")
-	#if event.is_action_released("shift"):
-		#action_buffer.erase("run")
+	if event.is_action_pressed("shift"):
+		action_buffer.append("run")
+	if event.is_action_released("shift"):
+		action_buffer.erase("run")
 
 	#Enable and disable sneaking
-	#if event.is_action_pressed("ctrl"):
-		#if action_buffer.has("sneak"):
-			#action_buffer.erase("sneak")
-		#else:
-			#action_buffer.append("sneak")
+	if event.is_action_pressed("ctrl"):
+		if action_buffer.has("sneak"):
+			action_buffer.erase("sneak")
+		else:
+			action_buffer.append("sneak")
 	
 	
 	if event.is_action_pressed("up"):
@@ -47,22 +47,23 @@ func _input(event: InputEvent) -> void:
 func gather_input() -> InputPackage:
 	var new_input: InputPackage = InputPackage.new()
 	
-	new_input.actions.append("idle")
+	
+	
+	if action_buffer.has("sneak"):
+		new_input.actions.append("sneak")
 	
 	if movement_buffer.is_empty():
 		new_input.input_direction = Vector2i.ZERO
+		new_input.actions.append("idle")
 	else:
 		new_input.input_direction = movement_buffer.back()
-		if new_input.input_direction != Vector2i.ZERO:
-			new_input.actions.append("walk")
-			#if action_buffer.has("run"):		# sprint is hidden here to avoid standing in place and sprinting
-				#new_input.actions.append("run")
+		new_input.actions.append("walk")
+		if action_buffer.has("run"):
+			new_input.actions.append("run")
+			
+	#print("Actions: %s" % [action_buffer])
+	#print("Movement: %s" % [movement_buffer])
+	#print("New_input: %s" % [new_input.actions])
 	
-	#if action_buffer.has("sneak"):
-		#if action_buffer.has("run"):
-			#action_buffer.erase("sneak")
-		#else:
-			#new_input.actions.append("sneak")
 
-	#print(new_input.input_direction)
 	return new_input

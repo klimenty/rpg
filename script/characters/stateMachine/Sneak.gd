@@ -1,17 +1,15 @@
 extends BaseState
-class_name Idle
+class_name Sneak
 
 #transition logic
 func check_relevance(input: InputPackage) -> String:
-	#if input.actions.has("run"):
-		#return "run"
-	if input.actions.has("walk"):
-		return "walk"
+	if input.input_direction == Vector2i.ZERO:
+		return "sneak"
 	return "ok"
-	
+
 
 func check_name() -> String:
-	return "idle"
+	return "sneak"
 
 
 #updating state

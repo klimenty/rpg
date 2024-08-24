@@ -9,6 +9,7 @@ var player: CharacterBody2D
 static var states_priority : Dictionary = {
 	"idle": 1,
 	"walk": 2,
+	"sneak": 3,
 	"run": 10  # be generous to not edit this to much when sprint, dash, crouch etc are added
 }
 
