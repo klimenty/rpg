@@ -4,6 +4,7 @@ class_name BaseState
 
 # all-move flags and variables here
 var player: CharacterBody2D
+var character_visual: Sprite2D
 
 var animation : String
 var move_name : String
@@ -12,7 +13,8 @@ static var states_priority : Dictionary = {
 	"idle": 1,
 	"walk": 2,
 	"sneak": 3,
-	"run": 10  # be generous to not edit this to much when sprint, dash, crouch etc are added
+	"run": 10,
+	"attack": 15  # be generous to not edit this to much when sprint, dash, crouch etc are added
 }
 
 

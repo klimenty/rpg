@@ -25,13 +25,13 @@ func _input(event: InputEvent) -> void:
 			action_buffer.append("sneak")
 
 	if event.is_action_pressed("a"):
-		attack_action_buffer.append("primary_attack_L")
+		attack_action_buffer.append("attack")
 	if event.is_action_pressed("s"):
-		attack_action_buffer.append("secondary_attack_L")
+		attack_action_buffer.append("attack")
 	if event.is_action_pressed("d"):
-		attack_action_buffer.append("primary_attack_R")
+		attack_action_buffer.append("attack")
 	if event.is_action_pressed("f"):
-		attack_action_buffer.append("secondary_attack_L")
+		attack_action_buffer.append("attack")
 
 	if event.is_action_pressed("up"):
 		movement_buffer.append(Vector2i.UP)
@@ -56,7 +56,10 @@ func gather_input() -> InputPackage:
 	var new_input: InputPackage = InputPackage.new()
 
 	if action_buffer.has("sneak"):
-		new_input.actions.append("sneak")
+		if action_buffer.has("run"):
+			action_buffer.erase("sneak")
+		else:
+			new_input.actions.append("sneak")
 
 	if attack_action_buffer.is_empty() == false:
 		new_input.combat_actions.append(attack_action_buffer.back())
@@ -72,5 +75,5 @@ func gather_input() -> InputPackage:
 
 	if new_input.actions.is_empty():
 		new_input.actions.append("idle")
-
+	print(new_input.actions)
 	return new_input

@@ -5,13 +5,16 @@ class_name PlayerStateMachine
 
 var current_state: BaseState
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var character_visual: Sprite2D = $"../Visual/Sprite2D"
+@onready var combat: Combat = $Combat
 
 
 @onready var states: Dictionary = {
 	"idle" : $States/Idle,
 	"walk" : $States/Walk,
 	"run": $States/Run,
-	"sneak": $States/Sneak
+	"sneak": $States/Sneak,
+	"attack": $States/Attack
 }
 
 var animation_direction: String = "DOWN"
@@ -23,6 +26,7 @@ func _ready() -> void:
 
 
 func update(input : InputPackage, delta : float) -> void:
+	input = combat.translate_combat_actions(input)
 	var relevance: String = current_state.check_relevance(input)
 	if relevance != "ok":
 		switch_to(relevance)
